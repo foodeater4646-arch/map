@@ -10,6 +10,10 @@ export default defineConfig({
         target: 'https://sqktlruozdaflvblssdu.supabase.co',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/supabase-api/, '')
+      },
+      '/generate-map': {
+        target: 'http://localhost:8000',
+        changeOrigin: true
       }
     }
   }

@@ -25,7 +25,8 @@ import LandingPage from "./LandingPage";
 import { supabase } from "./supabaseClient";
 
 // ── constants ────────────────────────────────────────────────────
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000/generate-map";
+// ── constants ────────────────────────────────────────────────────
+const API_URL = "/generate-map";
 
 const STYLES = [
   { value: "parchment", label: "📜  Parchment" },

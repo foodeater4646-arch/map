@@ -5,7 +5,7 @@
     "rewrites": [
         {
             "source": "/generate-map",
-            "destination": "https://ttrpg-map-forge-api.vercel.app/generate-map"
+            "destination": "/api"
         },
         {
             "source": "/supabase-api/:path*",

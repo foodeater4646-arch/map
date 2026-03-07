@@ -4,6 +4,14 @@
     "outputDirectory": "frontend/dist",
     "rewrites": [
         {
+            "source": "/generate-map",
+            "destination": "https://ttrpg-map-forge-api.vercel.app/generate-map"
+        },
+        {
+            "source": "/supabase-api/:path*",
+            "destination": "https://sqktlruozdaflvblssdu.supabase.co/:path*"
+        },
+        {
             "source": "/(.*)",
             "destination": "/index.html"
         }

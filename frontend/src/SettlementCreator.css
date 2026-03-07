@@ -304,11 +304,39 @@
 }
 
 @media (max-width: 600px) {
+    .creator-modal {
+        max-height: 95vh;
+        width: 96%;
+    }
+
     .creator-tabs {
         grid-template-columns: repeat(3, 1fr);
+        padding: 8px 1rem;
+    }
+
+    .tab-label {
+        display: none;
+    }
+
+    .tab-icon {
+        font-size: 1.4rem;
+    }
+
+    .creator-content {
+        padding: 1rem;
     }
 
     .field-row {
         flex-direction: column;
+        gap: 1rem;
+    }
+
+    .creator-footer {
+        padding: 1rem;
+        flex-direction: column;
+    }
+
+    .creator-footer .btn {
+        width: 100%;
     }
 }

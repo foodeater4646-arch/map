@@ -90,6 +90,27 @@
     .toolbar {
         flex-direction: column;
         gap: 10px;
+        padding: 10px;
+    }
+
+    .toolbar-left {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .toolbar-actions {
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    .toolbar-btn {
+        padding: 10px 14px;
+        font-size: 0.85rem;
+        flex: 1;
+        min-width: 80px;
+        justify-content: center;
     }
 
     .toolbar-label {

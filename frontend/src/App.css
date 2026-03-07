@@ -56,6 +56,23 @@
   font-size: 0.85rem;
 }
 
+/* ── mobile overlay ───────────────────────────── */
+.mobile-overlay {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .mobile-overlay.active {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    z-index: 90;
+    animation: fadeIn 0.3s ease-out;
+  }
+}
+
 /* ── glass card ───────────────────────────────── */
 .card {
   background: var(--bg-card);
@@ -361,13 +378,25 @@ input:checked+.slider:before {
 }
 
 /* ── responsive ───────────────────────────────── */
+@media (max-width: 1024px) {
+  .app {
+    padding: 0 1rem;
+  }
+}
+
 @media (max-width: 900px) {
   .dashboard-content {
     flex-direction: column;
+    min-height: auto;
   }
 
   .form-row {
     flex-direction: column;
+    gap: 0;
+  }
+
+  .dashboard-main {
+    padding: 8px;
   }
 }
 
@@ -382,5 +411,11 @@ input:checked+.slider:before {
 
   .btn {
     width: 100%;
+    padding: 0.9rem 1.5rem;
+    font-size: 0.9rem;
+  }
+
+  .form-group {
+    margin-bottom: 1rem;
   }
 }

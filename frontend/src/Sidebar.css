@@ -314,6 +314,31 @@
     }
 }
 
+@media (max-width: 500px) {
+    .sidebar {
+        width: 100%;
+        min-width: 100%;
+    }
+
+    .sidebar-header {
+        padding: 1.5rem 1rem 1rem;
+    }
+
+    .sidebar-tabs button {
+        margin-right: 1rem;
+        font-size: 0.7rem;
+    }
+
+    .sidebar-content {
+        padding: 1rem;
+    }
+
+    .action-btn {
+        padding: 8px 12px;
+        font-size: 0.8rem;
+    }
+}
+
 /* ── Dice Reroll Buttons ───────────────────────── */
 .reroll-icon-btn {
     background: none;

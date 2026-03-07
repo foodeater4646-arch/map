@@ -563,6 +563,8 @@ export default function App() {
                 activeView={activeView}
               />
 
+              <div className={`mobile-overlay ${activeView ? 'active' : ''}`} onClick={() => setActiveView(null)} />
+
               <div className="dashboard-content">
                 <div className="dashboard-main">
                   {/* Map Controls */}

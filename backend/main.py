@@ -22,12 +22,8 @@ env_path = Path(__file__).parent / ".env"
 load_dotenv(dotenv_path=env_path)
 
 NVIDIA_API_KEY = os.getenv("NVIDIA_API_KEY")
-if not NVIDIA_API_KEY or NVIDIA_API_KEY == "your_nvidia_api_key_here":
-    raise RuntimeError(
-        "NVIDIA_API_KEY is not set or is still the placeholder. "
-        "Please add your real key to backend/.env. "
-        "Get it from: https://build.nvidia.com/"
-    )
+# If key is missing, we will catch it during the request rather than crashing at startup
+
 
 # NVIDIA NIM Endpoint for Stable Diffusion 3 Medium
 NVIDIA_API_URL = "https://ai.api.nvidia.com/v1/genai/stabilityai/stable-diffusion-3-medium"
@@ -81,10 +77,10 @@ class MapResponse(BaseModel):
 # Style-to-prompt-prefix mapping
 # ---------------------------------------------------------------------------
 STYLE_PREFIXES: dict[str, str] = {
-    "parchment": "Breathtaking highly detailed Inkarnate style top-down fantasy city map, rich watercolor textures, elegant parchment borders, ornate cartography, vibrant colors, clear paths and rivers, 2d RPG map",
-    "dark fantasy": "Dark fantasy Dungeons and Dragons top-down Dungeondraft map, moody lighting, gothic architecture, grimdark setting, deep shadows, 2d game asset",
-    "top-down battle map": "High resolution top-down RPG battlemap, Dungeondraft and Crosshead Studios style, extremely vibrant colors, crisp hand-drawn forests and buildings, clear terrain, grid-ready game asset",
-    "classic D&D": "Classic vintage Dungeons & Dragons module map, hand-drawn cartography, tabletop RPG style, sepia tones, clean outlines",
+    "parchment": "Breathtaking highly detailed Inkarnate style top-down fantasy city map, sprawling urban layout, high density buildings, rich watercolor textures, elegant parchment borders, ornate cartography, vibrant colors, clear paths and rivers, 2d RPG map",
+    "dark fantasy": "Dark fantasy Dungeons and Dragons top-down Dungeondraft map, dense gothic city, moody lighting, gothic architecture, grimdark setting, deep shadows, 2d game asset",
+    "top-down battle map": "High resolution top-down RPG battlemap, Dungeondraft and Crosshead Studios style, sprawling city environment, extremely vibrant colors, crisp hand-drawn forests and buildings, clear terrain, grid-ready game asset",
+    "classic D&D": "Classic vintage Dungeons & Dragons module map, hand-drawn cartography, dense city grid, tabletop RPG style, sepia tones, clean outlines, historical map aesthetic",
 }
 
 # ---------------------------------------------------------------------------
@@ -136,6 +132,8 @@ async def enhance_prompt(client: httpx.AsyncClient, user_prompt: str, style: str
 
 @app.post("/generate-map", response_model=MapResponse)
 async def generate_map(request: MapRequest):
+    if not NVIDIA_API_KEY or NVIDIA_API_KEY == "your_nvidia_api_key_here":
+        raise HTTPException(status_code=500, detail="NVIDIA_API_KEY missing on server. Please set it in Vercel settings.")
     """
     Generate a fantasy map image via NVIDIA NIM (SD3 Medium).
 

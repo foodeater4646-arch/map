@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/generate-map",
+      "destination": "https://ttrpg-map-forge-api.vercel.app/generate-map"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}

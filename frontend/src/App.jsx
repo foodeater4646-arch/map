@@ -18,13 +18,14 @@ import ExportPanel from "./ExportPanel";
 import FactionList from "./FactionList";
 import DistrictList from "./DistrictList";
 import ShopPanel from "./ShopPanel";
+import SettingsPanel from "./SettingsPanel";
 import { generateSettlement, generateNPC } from "./npcGenerator";
 import Auth from "./Auth";
 import LandingPage from "./LandingPage";
 import { supabase } from "./supabaseClient";
 
 // ── constants ────────────────────────────────────────────────────
-const API_URL = "http://localhost:8000/generate-map";
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000/generate-map";
 
 const STYLES = [
   { value: "parchment", label: "📜  Parchment" },
@@ -96,7 +97,18 @@ export default function App() {
   const [showCreator, setShowCreator] = useState(false);
   const [showExport, setShowExport] = useState(false);
   const [showShopPanel, setShowShopPanel] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
+
+  // App Settings
+  const [appSettings, setAppSettings] = useState({
+    gridSize: 50,
+    gridOpacity: 0.3,
+    fogOpacity: 0.92,
+    showTooltips: true,
+    enableAnimations: true,
+    llmModel: 'meta/llama-3.1-8b-instruct',
+  });
   const [isGuest, setIsGuest] = useState(false);
   const [editTool, setEditTool] = useState("road");
   const [editLabel, setEditLabel] = useState("");
@@ -409,6 +421,14 @@ export default function App() {
     setShowShopPanel(true);
   };
 
+  const handleViewSettings = () => {
+    setShowSettings(true);
+  };
+
+  const handleUpdateAppSettings = (updates) => {
+    setAppSettings(prev => ({ ...prev, ...updates }));
+  };
+
   const hasDashboard = imageUrl && settlement;
 
   // ── render ───────────────────────────────────────────────────
@@ -537,6 +557,7 @@ export default function App() {
                 onViewFactions={handleViewFactions}
                 onViewDistricts={handleViewDistricts}
                 onViewShops={handleViewShops}
+                onViewSettings={handleViewSettings}
                 onExport={() => setShowExport(true)}
                 activeView={activeView}
               />
@@ -589,16 +610,18 @@ export default function App() {
                   <InteractiveMap
                     imageUrl={imageUrl}
                     showGrid={showGrid}
+                    gridSize={appSettings.gridSize}
+                    gridColor={`rgba(255, 255, 255, ${appSettings.gridOpacity})`}
+                    fogEnabled={settlement.fogEnabled || false}
+                    fogPaths={settlement.fogPaths || []}
+                    fogOpacity={appSettings.fogOpacity}
+                    isDrawingFog={isDrawingFog}
+                    onAddFogPath={handleUpdateFogPaths}
                     buildings={settlement.buildings}
                     time={settlement.time}
                     districts={settlement.districts}
                     drawingDistrictId={drawingDistrictId}
                     onUpdateDistrictPolygon={handleUpdateDistrictPolygon}
-                    setDrawingDistrictId={setDrawingDistrictId}
-                    fogEnabled={settlement.fogEnabled || false}
-                    fogPaths={settlement.fogPaths || []}
-                    isDrawingFog={isDrawingFog}
-                    onAddFogPath={handleUpdateFogPaths}
                     onSelectBuilding={handleSelectBuilding}
                     onUpdateBuildingPosition={(id, pos) => handleUpdateBuilding(id, { mapPosition: pos })}
                   />
@@ -691,6 +714,14 @@ export default function App() {
             <ShopPanel
               settlement={settlement}
               onClose={() => setShowShopPanel(false)}
+            />
+          )}
+
+          {showSettings && (
+            <SettingsPanel
+              settings={appSettings}
+              onUpdate={handleUpdateAppSettings}
+              onClose={() => setShowSettings(false)}
             />
           )}
 

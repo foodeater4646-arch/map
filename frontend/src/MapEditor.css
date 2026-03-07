@@ -1,0 +1,141 @@
+/* ================================================================
+   MapEditor Styles
+   ================================================================ */
+
+.map-editor-toggle {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.map-editor {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid var(--border-glow);
+    border-radius: 10px;
+    padding: 10px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    animation: fadeIn 0.2s ease-out;
+}
+
+.editor-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.editor-title {
+    font-family: var(--font-display);
+    font-size: 0.82rem;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.editor-cancel {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: color var(--transition);
+}
+
+.editor-cancel:hover {
+    color: var(--error);
+}
+
+.editor-tools {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+}
+
+.editor-tool {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid transparent;
+    border-radius: 8px;
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: all var(--transition);
+    min-width: 65px;
+}
+
+.editor-tool:hover {
+    background: rgba(168, 130, 82, 0.08);
+    border-color: rgba(168, 130, 82, 0.2);
+}
+
+.editor-tool.active {
+    background: rgba(168, 130, 82, 0.15);
+    border-color: var(--accent);
+}
+
+.tool-icon {
+    font-size: 1.2rem;
+}
+
+.tool-label {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    font-weight: 500;
+}
+
+.editor-tool.active .tool-label {
+    color: var(--accent);
+}
+
+.label-input-row {
+    display: flex;
+}
+
+.label-input {
+    flex: 1;
+    background: var(--bg-secondary);
+    border: 1px solid rgba(168, 130, 82, 0.2);
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    padding: 6px 10px;
+    outline: none;
+}
+
+.label-input:focus {
+    border-color: var(--accent);
+}
+
+.editor-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+/* Drawing overlay elements */
+.drawing-marker {
+    position: absolute;
+    pointer-events: none;
+    z-index: 5;
+}
+
+.drawing-label {
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.drawing-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+}

@@ -1,0 +1,98 @@
+/* ================================================================
+   Toolbar Styles
+   ================================================================ */
+
+.toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid var(--border-glow);
+    border-radius: 10px;
+    backdrop-filter: blur(12px);
+}
+
+.toolbar-left {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+}
+
+.toolbar-settlement-name {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    color: var(--accent);
+    letter-spacing: 0.04em;
+}
+
+.toolbar-size {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: capitalize;
+}
+
+.toolbar-actions {
+    display: flex;
+    gap: 4px;
+}
+
+.toolbar-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--text-secondary);
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    padding: 6px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all var(--transition);
+}
+
+.toolbar-btn:hover:not(:disabled) {
+    background: rgba(168, 130, 82, 0.1);
+    border-color: rgba(168, 130, 82, 0.2);
+    color: var(--text-primary);
+}
+
+.toolbar-btn.active {
+    background: rgba(168, 130, 82, 0.15);
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+.toolbar-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+
+.toolbar-icon {
+    font-size: 1rem;
+}
+
+.toolbar-label {
+    font-weight: 500;
+}
+
+.toolbar-count {
+    background: rgba(168, 130, 82, 0.15);
+    color: var(--accent);
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 1px 6px;
+    border-radius: 10px;
+}
+
+@media (max-width: 700px) {
+    .toolbar {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .toolbar-label {
+        display: none;
+    }
+}

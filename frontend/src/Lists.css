@@ -1,0 +1,88 @@
+.list-panel {
+    position: absolute;
+    top: 60px;
+    right: 280px;
+    width: 320px;
+    background: #1e1e24;
+    border: 1px solid #444;
+    border-radius: 8px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100vh - 80px);
+}
+
+.list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    border-bottom: 1px solid #333;
+    background: #25252b;
+    border-radius: 8px 8px 0 0;
+}
+
+.list-header h2 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: #e0e0e0;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: #aaa;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.close-btn:hover {
+    color: #fff;
+}
+
+.list-content {
+    padding: 12px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.empty-state {
+    text-align: center;
+    color: #aaa;
+    font-style: italic;
+    padding: 20px;
+}
+
+.list-item {
+    background: #2a2a32;
+    border: 1px solid #3a3a44;
+    border-radius: 6px;
+    padding: 12px;
+}
+
+.item-main {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.item-title {
+    font-weight: 600;
+    color: #ffd700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.icon {
+    font-size: 1.2rem;
+}
+
+.item-subtitle {
+    font-size: 0.85rem;
+    color: #888;
+}

@@ -1,0 +1,78 @@
+/* ================================================================
+   ExportPanel Styles
+   ================================================================ */
+
+.export-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeInOverlay 0.2s ease-out;
+}
+
+.export-panel {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-glow);
+    border-radius: var(--radius);
+    width: 90%;
+    max-width: 560px;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
+    animation: scaleIn 0.25s ease-out;
+}
+
+.export-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    padding: 1.25rem 1.5rem 1.5rem;
+}
+
+.export-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 20px 14px;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(168, 130, 82, 0.12);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all var(--transition);
+    text-align: center;
+}
+
+.export-card:hover {
+    background: rgba(168, 130, 82, 0.08);
+    border-color: var(--accent);
+    transform: translateY(-2px);
+}
+
+.export-card.vtt {
+    border-color: rgba(100, 140, 200, 0.2);
+}
+
+.export-card.vtt:hover {
+    border-color: #6b8ec9;
+}
+
+.export-icon {
+    font-size: 2rem;
+    margin-bottom: 4px;
+}
+
+.export-label {
+    font-family: var(--font-display);
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.export-desc {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+}

@@ -1,0 +1,402 @@
+/* ================================================================
+   Sidebar Styles
+   ================================================================ */
+
+.sidebar {
+    width: 380px;
+    min-width: 380px;
+    height: 100%;
+    background: var(--bg-card);
+    backdrop-filter: blur(16px);
+    border-left: 1px solid var(--border-glow);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 1.25rem 1.25rem 1rem;
+    border-bottom: 1px solid var(--border-glow);
+}
+
+.sidebar-title {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    color: var(--text-primary);
+    margin-bottom: 2px;
+}
+
+.sidebar-subtitle {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.sidebar-meta {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 4px;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 4px;
+    transition: color var(--transition);
+}
+
+.close-btn:hover {
+    color: var(--text-primary);
+}
+
+/* ── Tabs ───────────────────────────────────────── */
+.sidebar-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border-glow);
+    padding: 0 1.25rem;
+}
+
+.sidebar-tabs button {
+    background: none;
+    border: none;
+    font-family: var(--font-display);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    padding: 0.75rem 0;
+    margin-right: 1.5rem;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all var(--transition);
+}
+
+.sidebar-tabs button.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+}
+
+.sidebar-tabs button:hover:not(.active) {
+    color: var(--text-secondary);
+}
+
+/* ── Content ────────────────────────────────────── */
+.sidebar-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem 1.25rem;
+}
+
+.detail-section {
+    margin-bottom: 1.25rem;
+}
+
+.detail-section h3 {
+    font-family: var(--font-display);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(168, 130, 82, 0.15);
+    padding-bottom: 4px;
+}
+
+.detail-section p {
+    font-size: 0.88rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
+}
+
+.empty-state {
+    font-style: italic;
+    color: var(--text-muted) !important;
+}
+
+/* ── Ability Grid ───────────────────────────────── */
+.ability-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+}
+
+.ability-score {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    padding: 4px 8px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 6px;
+}
+
+.ability-name {
+    font-family: var(--font-display);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    width: 30px;
+}
+
+.ability-value {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.ability-mod {
+    color: var(--accent);
+    font-size: 0.8rem;
+}
+
+/* ── Location Link ──────────────────────────────── */
+.location-link {
+    cursor: pointer;
+    color: var(--accent) !important;
+    transition: opacity var(--transition);
+}
+
+.location-link:hover {
+    opacity: 0.8;
+}
+
+/* ── Occupant List ──────────────────────────────── */
+.occupant-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.occupant-card {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background var(--transition);
+}
+
+.occupant-card:hover {
+    background: rgba(168, 130, 82, 0.1);
+}
+
+.occupant-icon {
+    font-size: 1.2rem;
+}
+
+.occupant-info {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.occupant-name {
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.occupant-job {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.occupant-status {
+    font-size: 1rem;
+}
+
+/* ── Notes ──────────────────────────────────────── */
+.notes-input {
+    width: 100%;
+    min-height: 150px;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(168, 130, 82, 0.15);
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    font-size: 0.88rem;
+    padding: 10px;
+    resize: vertical;
+    outline: none;
+    transition: border-color var(--transition);
+}
+
+.notes-input:focus {
+    border-color: var(--accent);
+}
+
+/* ── Room Section ───────────────────────────────── */
+.room-section {
+    border-left: 2px solid rgba(168, 130, 82, 0.15);
+    padding-left: 10px;
+}
+
+/* ── Action Bar ────────────────────────────────── */
+.sidebar-actions {
+    display: flex;
+    gap: 4px;
+    padding: 8px 1.25rem;
+    border-bottom: 1px solid rgba(168, 130, 82, 0.1);
+}
+
+.action-btn {
+    background: rgba(168, 130, 82, 0.08);
+    border: 1px solid rgba(168, 130, 82, 0.15);
+    border-radius: 6px;
+    color: var(--text-secondary);
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: all var(--transition);
+}
+
+.action-btn:hover {
+    background: rgba(168, 130, 82, 0.15);
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+/* ── Edit Inputs ───────────────────────────────── */
+.edit-input {
+    background: var(--bg-secondary);
+    border: 1px solid var(--accent);
+    border-radius: 6px;
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    padding: 4px 8px;
+    outline: none;
+    font-size: 0.88rem;
+}
+
+.title-edit {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    width: 100%;
+    margin-bottom: 4px;
+}
+
+.inline-edit {
+    width: 120px;
+    margin-left: 4px;
+    font-size: 0.82rem;
+}
+
+/* ── Responsive ─────────────────────────────────── */
+@media (max-width: 900px) {
+    .sidebar {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 100;
+        box-shadow: -4px 0 20px rgba(0, 0, 0, 0.5);
+    }
+}
+
+/* ── Dice Reroll Buttons ───────────────────────── */
+.reroll-icon-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1rem;
+    opacity: 0.5;
+    transition: opacity var(--transition), transform 0.2s;
+    padding: 0;
+    line-height: 1;
+}
+
+.reroll-icon-btn:hover {
+    opacity: 1;
+    transform: scale(1.1) rotate(15deg);
+}
+
+/* ── Relations ─────────────────────────────────── */
+.relation-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.relation-item {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(168, 130, 82, 0.15);
+    border-radius: 8px;
+    padding: 10px;
+    cursor: pointer;
+    transition: all var(--transition);
+}
+
+.relation-item:hover {
+    background: rgba(168, 130, 82, 0.1);
+    border-color: var(--accent);
+}
+
+.relation-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+.relation-name {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.relation-type {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.relation-trust-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.trust-bar-bg {
+    flex: 1;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.trust-bar-fill {
+    height: 100%;
+    border-radius: 2px;
+}
+
+.trust-label {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    min-width: 40px;
+    text-align: right;
+}

@@ -7,15 +7,17 @@ import './Toolbar.css';
 export default function Toolbar({
     settlement,
     onViewPeople, onViewBuildings, onViewFactions, onViewDistricts, onViewShops,
-    onExport, activeView
+    onViewSettings, onExport, onBack, activeView
 }) {
     if (!settlement) return null;
 
     return (
         <nav className="toolbar">
             <div className="toolbar-left">
-                <h2 className="toolbar-settlement-name">{settlement.name}</h2>
-                <span className="toolbar-size">{settlement.size} settlement</span>
+                <div className="toolbar-info">
+                    <h2 className="toolbar-settlement-name">{settlement.name}</h2>
+                    <span className="toolbar-size">{settlement.size} settlement</span>
+                </div>
             </div>
 
             <div className="toolbar-actions">
@@ -70,7 +72,11 @@ export default function Toolbar({
                     <span className="toolbar-count">{settlement.districts?.length || 0}</span>
                 </button>
 
-                <button className="toolbar-btn" title="Settings (Coming soon)" disabled>
+                <button
+                    className={`toolbar-btn ${activeView === 'settings' ? 'active' : ''}`}
+                    title="Settings"
+                    onClick={onViewSettings}
+                >
                     <span className="toolbar-icon">⚙️</span>
                     <span className="toolbar-label">Settings</span>
                 </button>

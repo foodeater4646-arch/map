@@ -15,9 +15,36 @@
 
 .toolbar-left {
     display: flex;
-    align-items: baseline;
-    gap: 12px;
+    align-items: center;
+    gap: 15px;
 }
+
+.toolbar-back-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 1.2rem;
+}
+
+.toolbar-back-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: var(--primary);
+    transform: translateX(-2px);
+}
+
+.toolbar-info {
+    display: flex;
+    flex-direction: column;
+}
+
+
 
 .toolbar-settlement-name {
     font-family: var(--font-display);

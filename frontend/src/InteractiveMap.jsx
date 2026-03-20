@@ -15,6 +15,7 @@ const InteractiveMap = ({
     fogPaths = [],
     isDrawingFog = false,
     onAddFogPath = null,
+    fogOpacity = 0.92,
     onSelectBuilding = null, // <-- Added for click selection
     onUpdateBuildingPosition = null // <-- Added for dragging markers
 }) => {
@@ -25,16 +26,53 @@ const InteractiveMap = ({
     const [clickStart, setClickStart] = useState({ x: 0, y: 0 }); // To differentiate click from drag
     const [draggedBuildingId, setDraggedBuildingId] = useState(null); // <-- ID of building currently being dragged
     const [currentFogPath, setCurrentFogPath] = useState(null); // <-- Path being drawn
+    const [lastTouchDistance, setLastTouchDistance] = useState(null); // For pinch zoom
+    const lastTouchPos = useRef({ x: 0, y: 0 }); // For touch panning
     const containerRef = useRef(null);
     const mapRef = useRef(null);
 
-    // Handle Zoom
-    const handleWheel = (e) => {
+    // Handle Zoom (Centered on Mouse)
+    const handleWheel = useCallback((e) => {
         e.preventDefault();
-        const zoomSpeed = 0.001;
-        const newScale = Math.min(Math.max(scale - e.deltaY * zoomSpeed, 0.5), 5);
-        setScale(newScale);
-    };
+        const zoomSpeed = 0.0015;
+        const zoomFactor = 1 - e.deltaY * zoomSpeed;
+
+        if (containerRef.current) {
+            const rect = containerRef.current.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+
+            setScale(prevScale => {
+                const newScale = Math.min(Math.max(prevScale * zoomFactor, 0.5), 5);
+
+                setPosition(prevPos => {
+                    // Calculate point on map before zoom
+                    const mapX = (mouseX - prevPos.x) / prevScale;
+                    const mapY = (mouseY - prevPos.y) / prevScale;
+
+                    // Calculate new position to keep mapX/mapY at the same mouseX/mouseY
+                    return {
+                        x: mouseX - mapX * newScale,
+                        y: mouseY - mapY * newScale
+                    };
+                });
+
+                return newScale;
+            });
+        }
+    }, []); // Empty deps because we use functional updates
+
+    useEffect(() => {
+        const container = containerRef.current;
+        if (container) {
+            container.addEventListener('wheel', handleWheel, { passive: false });
+        }
+        return () => {
+            if (container) {
+                container.removeEventListener('wheel', handleWheel);
+            }
+        };
+    }, [handleWheel]);
 
     // Handle Pan start
     const handleMouseDown = (e) => {
@@ -112,6 +150,77 @@ const InteractiveMap = ({
         }
     };
 
+    // --- Touch Event Handlers ---
+    const handleTouchStart = (e) => {
+        if (e.touches.length === 1) {
+            const touch = e.touches[0];
+
+            if (isDrawingFog && mapRef.current) {
+                const rect = mapRef.current.getBoundingClientRect();
+                const x = (touch.clientX - rect.left) / scale;
+                const y = (touch.clientY - rect.top) / scale;
+                setCurrentFogPath([{ x, y }]);
+                return;
+            }
+
+            setIsDragging(true);
+            setDragStart({ x: touch.clientX - position.x, y: touch.clientY - position.y });
+            setClickStart({ x: touch.clientX, y: touch.clientY });
+            lastTouchPos.current = { x: touch.clientX, y: touch.clientY };
+        } else if (e.touches.length === 2) {
+            // Initialize pinch zoom
+            const dist = Math.hypot(
+                e.touches[0].clientX - e.touches[1].clientX,
+                e.touches[0].clientY - e.touches[1].clientY
+            );
+            setLastTouchDistance(dist);
+            setIsDragging(false); // Stop panning when zooming
+        }
+    };
+
+    const handleTouchMove = (e) => {
+        if (e.touches.length === 1) {
+            const touch = e.touches[0];
+
+            if (isDrawingFog && currentFogPath && mapRef.current) {
+                const rect = mapRef.current.getBoundingClientRect();
+                const x = (touch.clientX - rect.left) / scale;
+                const y = (touch.clientY - rect.top) / scale;
+                setCurrentFogPath([...currentFogPath, { x, y }]);
+                return;
+            }
+
+            if (isDragging) {
+                setPosition({
+                    x: touch.clientX - dragStart.x,
+                    y: touch.clientY - dragStart.y
+                });
+            }
+        } else if (e.touches.length === 2) {
+            // Handle pinch zoom
+            const dist = Math.hypot(
+                e.touches[0].clientX - e.touches[1].clientX,
+                e.touches[0].clientY - e.touches[1].clientY
+            );
+
+            if (lastTouchDistance) {
+                const zoomFactor = dist / lastTouchDistance;
+                const newScale = Math.min(Math.max(scale * zoomFactor, 0.5), 5);
+                setScale(newScale);
+            }
+            setLastTouchDistance(dist);
+        }
+    };
+
+    const handleTouchEnd = () => {
+        if (isDrawingFog && currentFogPath) {
+            if (onAddFogPath) onAddFogPath(currentFogPath);
+            setCurrentFogPath(null);
+        }
+        setIsDragging(false);
+        setLastTouchDistance(null);
+    };
+
     const resetView = () => {
         setScale(1);
         setPosition({ x: 0, y: 0 });
@@ -153,6 +262,9 @@ const InteractiveMap = ({
                 onMouseMove={handleMouseMove}
                 onMouseUp={handleMouseUp}
                 onMouseLeave={handleMouseUp}
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleTouchEnd}
             >
                 <div
                     className="map-layer"
@@ -246,7 +358,7 @@ const InteractiveMap = ({
                                     )}
                                 </mask>
                             </defs>
-                            <rect width="100%" height="100%" fill="rgba(10,10,20,0.92)" mask="url(#fog-mask)" />
+                            <rect width="100%" height="100%" fill={`rgba(10,10,20,${fogOpacity})`} mask="url(#fog-mask)" />
                         </svg>
                     )}
 

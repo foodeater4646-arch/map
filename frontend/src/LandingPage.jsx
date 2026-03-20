@@ -1,7 +1,15 @@
 import React from 'react';
 import './LandingPage.css';
 
-export default function LandingPage({ onLoginClick, onGuestStart }) {
+export default function LandingPage({
+    prompt,
+    setPrompt,
+    loading,
+    handleGenerate,
+    onLoadCloud,
+    onLoginClick,
+    onGuestStart
+}) {
     return (
         <div className="landing-container">
             {/* ── Navbar ── */}

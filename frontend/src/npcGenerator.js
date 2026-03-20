@@ -346,9 +346,9 @@ export function generateSettlement(nameOrSettings, size = 'small') {
 
     const sizeConfig = {
         small: { buildings: 15, npcs: 40 },
-        medium: { buildings: 30, npcs: 80 },
-        large: { buildings: 60, npcs: 150 },
-        metropolis: { buildings: 100, npcs: 300 },
+        medium: { buildings: 35, npcs: 90 },
+        large: { buildings: 80, npcs: 200 },
+        metropolis: { buildings: 200, npcs: 500 },
     };
 
     const config = sizeConfig[settings.size] || sizeConfig.small;
@@ -420,8 +420,8 @@ export function generateSettlement(nameOrSettings, size = 'small') {
 
     // Assign buildings to districts
     if (districts.length > 0) {
-        buildings.forEach(b => {
-            const district = pick(districts);
+        buildings.forEach((b, i) => {
+            const district = districts[i % districts.length];
             b.districtId = district.id;
             district.buildings.push(b.id);
         });
@@ -511,9 +511,11 @@ export function generateSettlement(nameOrSettings, size = 'small') {
     });
 
     return {
+        id: nextSettlementId++,
         name: settings.name,
         size: settings.size,
         settings: {
+            ...settings,
             lifestyle: settings.lifestyle || 'Modest',
             guardLevel: settings.guardLevel || 3,
             roadStyle: settings.roadStyle || 'Cobblestone',
@@ -533,10 +535,10 @@ export function generateSettlement(nameOrSettings, size = 'small') {
             economyLevel: settings.economyLevel || 'Standard',
         },
         buildings,
-        districts,   // Added districts
+        districts,
         npcs,
-        factions,    // Added factions
-        time: { hour: 8, day: 1, totalDays: 7 },
+        factions,
+        time: { hour: 8, day: 1, totalDays: settings.daysInWeek || 7 },
         notes: '',
     };
 }

@@ -4,9 +4,16 @@ import { createClient } from '@supabase/supabase-js';
 const supabaseUrl = window.location.origin + '/supabase-api';
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-if (!supabaseAnonKey) {
-    console.error("❌ SUPABASE_ANON_KEY IS MISSING! Check Vercel Environment Variables.");
+if (!supabaseAnonKey && import.meta.env.PROD) {
+    console.error("❌ CRITICAL: VITE_SUPABASE_ANON_KEY is missing in production!");
+    console.info("Go to Vercel Settings -> Environment Variables and add VITE_SUPABASE_ANON_KEY.");
 }
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey || 'placeholder-key');
+export const supabase = createClient(supabaseUrl, supabaseAnonKey || 'placeholder-key', {
+    auth: {
+        autoRefreshToken: true,
+        persistSession: true,
+        detectSessionInUrl: true
+    }
+});
 

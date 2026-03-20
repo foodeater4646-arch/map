@@ -488,6 +488,10 @@ export default function App() {
               onLoadCloud={() => setShowSaves(true)}
               onLoginClick={() => setShowAuthModal(true)}
               onGuestStart={() => { setSettlement({ name: 'Untitled Settlement', loading: true }); setShowCreator(true); }}
+              session={session}
+              savedSettlements={savedSettlements}
+              onLoadSave={loadSettlementFromCloud}
+              onLogout={handleSignOut}
             />
           </div>
         ) : (
@@ -641,7 +645,11 @@ export default function App() {
         
         {showAuthModal && (
           <Auth
-            onLogin={() => setShowAuthModal(false)}
+            onLogin={(user) => { 
+                setShowAuthModal(false); 
+                // Delay slightly to allow session to settle, then open creator
+                setTimeout(() => setShowCreator(true), 300);
+            }}
             onClose={() => setShowAuthModal(false)}
           />
         )}

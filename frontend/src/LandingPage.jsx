@@ -8,7 +8,11 @@ export default function LandingPage({
     handleGenerate,
     onLoadCloud,
     onLoginClick,
-    onGuestStart
+    onGuestStart,
+    session,
+    savedSettlements = [],
+    onLoadSave,
+    onLogout
 }) {
     return (
         <div className="landing-container">
@@ -18,29 +22,75 @@ export default function LandingPage({
                 <div className="nav-links">
                     <a href="#features">Features</a>
                     <a href="#pricing">Pricing</a>
-                    <button className="btn btn-primary" onClick={onLoginClick}>Log In</button>
+                    {session ? (
+                        <div className="nav-user-info">
+                            <span className="user-email">{session.user.email}</span>
+                            <button className="btn btn-sm btn-secondary" onClick={onLogout} style={{ marginLeft: '1rem' }}>Log Out</button>
+                        </div>
+                    ) : (
+                        <button className="btn btn-primary" onClick={onLoginClick}>Log In</button>
+                    )}
                 </div>
             </nav>
 
             {/* ── Hero Section ── */}
             <header className="hero-section">
                 <div className="hero-content">
-                    <h1>Every street, building, and resident</h1>
+                    <h1 className="hero-title">Every street, building, and resident</h1>
                     <h1 className="highlight">ready in seconds.</h1>
                     <p className="hero-subtitle">
                         Generate highly detailed, interactive fantasy settlement maps powered by Stable Diffusion.
                         Simulate thousands of NPCs, control the weather, edit the town, and export your world for VTTs.
                     </p>
                     <div className="hero-actions">
-                        <button className="btn btn-primary hero-btn" onClick={onLoginClick}>
-                            Create & Manage Settlements <br /> <small>Save to Cloud</small>
+                        <button className="btn btn-primary hero-btn" onClick={session ? () => onLoadSave(null) : onLoginClick}>
+                            {session ? "Create New Settlement" : "Create & Manage Settlements"} <br /> 
+                            <small>{session ? "Procedural Alpha v2" : "Save to Cloud"}</small>
                         </button>
-                        <button className="btn btn-secondary hero-btn guest-btn" onClick={onGuestStart}>
-                            Create One-Time Settlement <br /> <small>No sign-up (Deletes on exit)</small>
-                        </button>
+                        {!session && (
+                            <button className="btn btn-secondary hero-btn guest-btn" onClick={onGuestStart}>
+                                Create One-Time Settlement <br /> <small>No sign-up (Deletes on exit)</small>
+                            </button>
+                        )}
+                        {session && (
+                            <button className="btn btn-secondary hero-btn" onClick={() => window.scrollTo({ top: document.getElementById('saved-worlds').offsetTop - 100, behavior: 'smooth' })}>
+                                View Your Saves <br /> <small>{savedSettlements.length} Cloud Worlds</small>
+                            </button>
+                        )}
                     </div>
                 </div>
             </header>
+
+            {/* ── Saved Settlements Section (Logged In Only) ── */}
+            {session && (
+                <section id="saved-worlds" className="saved-worlds-section">
+                    <div className="section-header">
+                        <h2 className="section-title">Your Saved Worlds</h2>
+                        <p className="section-subtitle">Jump back into your active campaigns</p>
+                    </div>
+                    
+                    <div className="saved-worlds-grid">
+                        {savedSettlements.length === 0 ? (
+                            <div className="no-saves-cta" onClick={() => onLoadSave(null)}>
+                                <div className="cta-plus">+</div>
+                                <h3>Create Your First World</h3>
+                                <p>Start generating your first settlement to see it here.</p>
+                            </div>
+                        ) : (
+                            savedSettlements.map(save => (
+                                <div key={save.id} className="save-card">
+                                    <div className="save-card-icon">🗺️</div>
+                                    <div className="save-card-info">
+                                        <h3>{save.name}</h3>
+                                        <p>Created: {new Date(save.created_at).toLocaleDateString()}</p>
+                                    </div>
+                                    <button className="btn btn-primary btn-sm" onClick={() => onLoadSave(save.id)}>Load World</button>
+                                </div>
+                            ))
+                        )}
+                    </div>
+                </section>
+            )}
 
             {/* ── Features Grid ── */}
             <section id="features" className="features-section">

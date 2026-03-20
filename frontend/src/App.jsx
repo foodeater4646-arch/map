@@ -617,51 +617,120 @@ export default function App() {
                     onAddNPC={handleAddNPC}
                   />
                 )}
-              </div>
-            </>
-          )}
-
-          {showCreator && <SettlementCreator onClose={() => setShowCreator(false)} onCreate={handleCreateSettlement} isPremium={isPremium} />}
-          {showAuthModal && <Auth onLogin={() => setShowAuthModal(false)} onClose={() => setShowAuthModal(false)} />}
-          {showExport && settlement && <ExportPanel settlement={settlement} imageUrl={imageUrl} onClose={() => setShowExport(false)} isPremium={isPremium} isGuest={isGuest} />}
-          {showPeopleList && settlement && <PeopleList npcs={settlement.npcs} buildings={settlement.buildings} onSelectNPC={handleSelectNPC} onClose={() => { setShowPeopleList(false); setActiveView(null); }} />}
-          {showBuildingList && settlement && <BuildingList buildings={settlement.buildings} npcs={settlement.npcs} onSelectBuilding={handleSelectBuilding} onClose={() => { setShowBuildingList(false); setActiveView(null); }} />}
-          {showFactionList && settlement && <FactionList factions={settlement.factions} npcs={settlement.npcs} onClose={() => { setShowFactionList(false); setActiveView(null); }} />}
-          {showDistrictList && settlement && <DistrictList districts={settlement.districts} buildings={settlement.buildings} drawingDistrictId={drawingDistrictId} onSetDrawing={setDrawingDistrictId} onUpdatePolygon={handleUpdateDistrictPolygon} onSelectBuilding={handleSelectBuilding} onClose={() => { setShowDistrictList(false); setActiveView(null); setDrawingDistrictId(null); }} />}
-          {showShopPanel && settlement && <ShopPanel settlement={settlement} onClose={() => setShowShopPanel(false)} />}
-          {showSettings && <SettingsPanel settings={appSettings} onUpdate={handleUpdateAppSettings} onClose={() => setShowSettings(false)} />}
-
-          {showSaves && (
-            <div className="modal-overlay">
-              <div className="modal-content" style={{ maxWidth: '500px' }}>
-                <div className="modal-header">
-                  <h2>Cloud Saves</h2>
-                  <button className="close-btn" onClick={() => setShowSaves(false)}>✕</button>
-                </div>
-                <div className="modal-body" style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                  {savedSettlements.length === 0 ? (
-                    <p style={{ textAlign: 'center', color: '#888', fontStyle: 'italic' }}>No saved settlements found.</p>
-                  ) : (
-                    savedSettlements.map(save => (
-                      <div key={save.id} className="save-item" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px', background: 'rgba(0,0,0,0.2)', border: '1px solid #444', borderRadius: '8px' }}>
-                        <div>
-                          <strong style={{ display: 'block', fontSize: '1.1rem' }}>{save.name}</strong>
-                          <span style={{ fontSize: '0.8rem', color: '#aaa' }}>{new Date(save.created_at).toLocaleString()}</span>
-                        </div>
-                        <button className="btn btn-sm btn-primary" onClick={() => loadSettlementFromCloud(save.id)}>Load</button>
-                      </div>
-                    ))
-                  )}
-                </div>
-              </div>
             </div>
-          )}
+          </>
+        )}
+      </div>
+    )}
 
-          <footer className="app-footer">
-            Powered by Stable Diffusion via NVIDIA &middot; Built with React + FastAPI &middot; v1.0.4-FIX-BACK
-          </footer>
+      {/* ── Modals & Overlays ── */}
+      {showCreator && (
+        <SettlementCreator
+          onClose={() => setShowCreator(false)}
+          onCreate={handleCreateSettlement}
+          isPremium={isPremium}
+        />
+      )}
+      
+      {showAuthModal && (
+        <Auth
+          onLogin={() => setShowAuthModal(false)}
+          onClose={() => setShowAuthModal(false)}
+        />
+      )}
+      
+      {showExport && settlement && (
+        <ExportPanel
+          settlement={settlement}
+          imageUrl={imageUrl}
+          onClose={() => setShowExport(false)}
+          isPremium={isPremium}
+          isGuest={isGuest}
+        />
+      )}
+      
+      {showPeopleList && settlement && (
+        <PeopleList
+          npcs={settlement.npcs}
+          buildings={settlement.buildings}
+          onSelectNPC={handleSelectNPC}
+          onClose={() => { setShowPeopleList(false); setActiveView(null); }}
+        />
+      )}
+      
+      {showBuildingList && settlement && (
+        <BuildingList
+          buildings={settlement.buildings}
+          npcs={settlement.npcs}
+          onSelectBuilding={handleSelectBuilding}
+          onClose={() => { setShowBuildingList(false); setActiveView(null); }}
+        />
+      )}
+      
+      {showFactionList && settlement && (
+        <FactionList
+          factions={settlement.factions}
+          npcs={settlement.npcs}
+          onClose={() => { setShowFactionList(false); setActiveView(null); }}
+        />
+      )}
+      
+      {showDistrictList && settlement && (
+        <DistrictList
+          districts={settlement.districts}
+          buildings={settlement.buildings}
+          drawingDistrictId={drawingDistrictId}
+          onSetDrawing={setDrawingDistrictId}
+          onUpdatePolygon={handleUpdateDistrictPolygon}
+          onSelectBuilding={handleSelectBuilding}
+          onClose={() => { setShowDistrictList(false); setActiveView(null); setDrawingDistrictId(null); }}
+        />
+      )}
+      
+      {showShopPanel && settlement && (
+        <ShopPanel
+          settlement={settlement}
+          onClose={() => setShowShopPanel(false)}
+        />
+      )}
+      
+      {showSettings && (
+        <SettingsPanel
+          settings={appSettings}
+          onUpdate={handleUpdateAppSettings}
+          onClose={() => setShowSettings(false)}
+        />
+      )}
+
+      {showSaves && (
+        <div className="modal-overlay">
+          <div className="modal-content" style={{ maxWidth: '500px' }}>
+            <div className="modal-header">
+              <h2>Cloud Saves</h2>
+              <button className="close-btn" onClick={() => setShowSaves(false)}>✕</button>
+            </div>
+            <div className="modal-body" style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              {savedSettlements.length === 0 ? (
+                <p style={{ textAlign: 'center', color: '#888', fontStyle: 'italic' }}>No saved settlements found.</p>
+              ) : (
+                savedSettlements.map(save => (
+                  <div key={save.id} className="save-item" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px', background: 'rgba(0,0,0,0.2)', border: '1px solid #444', borderRadius: '8px' }}>
+                    <div>
+                      <strong style={{ display: 'block', fontSize: '1.1rem' }}>{save.name}</strong>
+                      <span style={{ fontSize: '0.8rem', color: '#aaa' }}>{new Date(save.created_at).toLocaleString()}</span>
+                    </div>
+                    <button className="btn btn-sm btn-primary" onClick={() => loadSettlementFromCloud(save.id)}>Load</button>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
         </div>
       )}
+
+      <footer className="app-footer">
+        Powered by Stable Diffusion via NVIDIA &middot; Built with React + FastAPI &middot; v1.0.4-FIX-MODAL
+      </footer>
     </ErrorBoundary>
   );
 }

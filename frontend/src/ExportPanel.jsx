@@ -5,8 +5,9 @@
  */
 
 import './ExportPanel.css';
+import PremiumBadge from './PremiumBadge';
 
-export default function ExportPanel({ settlement, imageUrl, onClose }) {
+export default function ExportPanel({ settlement, imageUrl, onClose, isPremium, isGuest }) {
     // ── JSON Export ────────────────────────────────────────────
     const exportJSON = () => {
         const data = {
@@ -281,17 +282,19 @@ export default function ExportPanel({ settlement, imageUrl, onClose }) {
                         <span className="export-desc">CSV spreadsheet</span>
                     </button>
 
-                    <button className="export-card vtt" onClick={exportFoundryVTT}>
+                    <div className={`export-card vtt ${!isPremium ? 'locked' : ''}`} onClick={isPremium ? exportFoundryVTT : undefined}>
                         <span className="export-icon">🎲</span>
                         <span className="export-label">FoundryVTT</span>
                         <span className="export-desc">Scene + Tokens</span>
-                    </button>
+                        {!isPremium && <PremiumBadge feature="VTT Export" compact />}
+                    </div>
 
-                    <button className="export-card vtt" onClick={exportRoll20}>
+                    <div className={`export-card vtt ${!isPremium ? 'locked' : ''}`} onClick={isPremium ? exportRoll20 : undefined}>
                         <span className="export-icon">🎯</span>
                         <span className="export-label">Roll20</span>
                         <span className="export-desc">Characters JSON</span>
-                    </button>
+                        {!isPremium && <PremiumBadge feature="VTT Export" compact />}
+                    </div>
 
                     <button className="export-card wiki" onClick={exportCampaignWiki}>
                         <span className="export-icon">📖</span>

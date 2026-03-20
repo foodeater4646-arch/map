@@ -7,6 +7,7 @@
 
 import { useState } from 'react';
 import './SettlementCreator.css';
+import PremiumBadge from './PremiumBadge';
 
 const GOVERNMENT_TYPES = [
     'Monarchy', 'Council', 'Theocracy', 'Democracy', 'Oligarchy',
@@ -57,7 +58,7 @@ const TABS = [
     { id: 'advanced', label: 'Building Options', icon: '🔧' },
 ];
 
-export default function SettlementCreator({ onClose, onCreate }) {
+export default function SettlementCreator({ onClose, onCreate, isPremium }) {
     const [activeTab, setActiveTab] = useState('general');
 
     // ── General ───────────────────────────────────────────────
@@ -186,7 +187,12 @@ export default function SettlementCreator({ onClose, onCreate }) {
                                         <option value="small">Small (~15 people)</option>
                                         <option value="medium">Medium (~30 people)</option>
                                         <option value="large">Large (~50 people)</option>
-                                        <option value="metropolis">Metropolis (~100 people)</option>
+                                        <option value="metropolis" disabled={!isPremium}>
+                                            Metropolis (~200 people) {!isPremium ? '👑 Premium' : ''}
+                                        </option>
+                                        <option value="mega-city" disabled={!isPremium}>
+                                            Mega-City (~500 people) {!isPremium ? '👑 Premium' : ''}
+                                        </option>
                                     </select>
                                 </div>
                             </div>
@@ -266,6 +272,16 @@ export default function SettlementCreator({ onClose, onCreate }) {
                                     className="add-race-input"
                                 />
                                 <button className="btn btn-sm btn-secondary" onClick={addCustomRace}>+ Add Race</button>
+                            </div>
+
+                            <div className="field" style={{ marginTop: '1.5rem', position: 'relative' }}>
+                                <label>Custom Name List (JSON)</label>
+                                <textarea
+                                    disabled={!isPremium}
+                                    placeholder='e.g. {"male": ["Thorin"], "female": ["Galadriel"], "last": ["Oakenshield"]}'
+                                    style={{ width: '100%', height: '80px', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '6px', color: 'var(--text-primary)', padding: '10px', fontSize: '0.85rem' }}
+                                />
+                                {!isPremium && <PremiumBadge feature="Custom Name Lists" compact />}
                             </div>
                         </div>
                     )}
@@ -430,6 +446,15 @@ export default function SettlementCreator({ onClose, onCreate }) {
                                 <label>Random Seed (leave blank for random)</label>
                                 <input type="text" value={seed} onChange={e => setSeed(e.target.value)} placeholder="e.g. 42, dragonkeep, ..." />
                                 <p className="field-hint">Use the same seed to recreate an identical settlement.</p>
+                            </div>
+
+                            <div className="field" style={{ position: 'relative', marginTop: '1rem' }}>
+                                <label className="checkbox-label">
+                                    <input type="checkbox" disabled={!isPremium} />
+                                    Real-time Map Preview
+                                </label>
+                                <p className="field-hint">See building placement updates live as you change settings.</p>
+                                {!isPremium && <PremiumBadge feature="Real-time Preview" compact />}
                             </div>
                         </div>
                     )}

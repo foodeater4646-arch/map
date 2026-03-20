@@ -24,6 +24,7 @@ import { generateSettlement, generateNPC } from "./npcGenerator";
 import Auth from "./Auth";
 import LandingPage from "./LandingPage";
 import { supabase } from "./supabaseClient";
+import usePremium from "./usePremium";
 
 // ── constants ────────────────────────────────────────────────────
 const API_URL = "/generate-map";
@@ -120,6 +121,9 @@ export default function App() {
   const [showSaves, setShowSaves] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
+  // Premium tier
+  const { isPremium, isGuest, isLoggedIn } = usePremium(session);
+
   // ── Auth Init ───────────────────────────────────────────────
   useEffect(() => {
     // Initial check for session
@@ -192,6 +196,13 @@ export default function App() {
 
   const saveSettlementToCloud = async () => {
     if (!session || !settlement) return;
+
+    // Free users: max 10 saves
+    if (!isPremium && savedSettlements.length >= 10) {
+      alert('Free accounts can save up to 10 settlements. Upgrade to Premium for unlimited saves!');
+      return;
+    }
+
     setIsSaving(true);
     try {
       const { error } = await supabase.from('settlements').insert([
@@ -610,9 +621,9 @@ export default function App() {
             </>
           )}
 
-          {showCreator && <SettlementCreator onClose={() => setShowCreator(false)} onCreate={handleCreateSettlement} />}
+          {showCreator && <SettlementCreator onClose={() => setShowCreator(false)} onCreate={handleCreateSettlement} isPremium={isPremium} />}
           {showAuthModal && <Auth onLogin={() => setShowAuthModal(false)} onClose={() => setShowAuthModal(false)} />}
-          {showExport && settlement && <ExportPanel settlement={settlement} imageUrl={imageUrl} onClose={() => setShowExport(false)} />}
+          {showExport && settlement && <ExportPanel settlement={settlement} imageUrl={imageUrl} onClose={() => setShowExport(false)} isPremium={isPremium} isGuest={isGuest} />}
           {showPeopleList && settlement && <PeopleList npcs={settlement.npcs} buildings={settlement.buildings} onSelectNPC={handleSelectNPC} onClose={() => { setShowPeopleList(false); setActiveView(null); }} />}
           {showBuildingList && settlement && <BuildingList buildings={settlement.buildings} npcs={settlement.npcs} onSelectBuilding={handleSelectBuilding} onClose={() => { setShowBuildingList(false); setActiveView(null); }} />}
           {showFactionList && settlement && <FactionList factions={settlement.factions} npcs={settlement.npcs} onClose={() => { setShowFactionList(false); setActiveView(null); }} />}

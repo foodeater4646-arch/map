@@ -138,7 +138,7 @@ export default function LandingPage({
                             <li>👑 Metropolis Scale (Up to 50k residents)</li>
                             <li>👑 Direct VTT Integration (Foundry/Roll20)</li>
                         </ul>
-                        <button className="btn btn-premium" onClick={() => window.open('https://patreon.com', '_blank')}>Unlock Premium</button>
+                        <button className="btn btn-premium" onClick={() => window.open('https://www.patreon.com/c/mapforge936/membership', '_blank')}>Unlock Premium</button>
                     </div>
 
                 </div>

@@ -345,10 +345,11 @@ export function generateSettlement(nameOrSettings, size = 'small') {
     }
 
     const sizeConfig = {
-        small: { buildings: 15, npcs: 40 },
-        medium: { buildings: 35, npcs: 90 },
-        large: { buildings: 80, npcs: 200 },
-        metropolis: { buildings: 200, npcs: 500 },
+        small: { buildings: 8, npcs: 15 },
+        medium: { buildings: 15, npcs: 30 },
+        large: { buildings: 25, npcs: 50 },
+        metropolis: { buildings: 80, npcs: 200 },
+        'mega-city': { buildings: 200, npcs: 500 },
     };
 
     const config = sizeConfig[settings.size] || sizeConfig.small;

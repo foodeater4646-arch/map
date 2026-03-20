@@ -1,0 +1,52 @@
+.premium-badge-overlay {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 16px;
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    text-align: center;
+}
+
+.premium-badge-overlay.compact {
+    flex-direction: row;
+    padding: 8px 14px;
+    gap: 10px;
+}
+
+.premium-badge-overlay .lock-icon {
+    font-size: 1.6rem;
+}
+
+.premium-badge-overlay.compact .lock-icon {
+    font-size: 1.1rem;
+}
+
+.premium-badge-overlay .lock-label {
+    color: #d4af37;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.premium-badge-overlay .unlock-btn {
+    font-size: 0.75rem;
+    padding: 6px 14px;
+    background: linear-gradient(135deg, #d4af37, #b8860b);
+    color: #1a1a2e;
+    border: none;
+    border-radius: 6px;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.premium-badge-overlay .unlock-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 12px rgba(212, 175, 55, 0.5);
+}

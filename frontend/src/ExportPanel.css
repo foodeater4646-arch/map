@@ -76,3 +76,19 @@
     font-size: 0.72rem;
     color: var(--text-muted);
 }
+
+/* Locked Premium Card */
+.export-card.locked {
+    position: relative;
+    cursor: default;
+    opacity: 0.9;
+    background: rgba(20, 20, 20, 0.5);
+    border-color: rgba(212, 175, 55, 0.15);
+    overflow: hidden;
+}
+
+.export-card.locked:hover {
+    transform: none;
+    background: rgba(20, 20, 20, 0.6);
+    border-color: rgba(212, 175, 55, 0.3);
+}

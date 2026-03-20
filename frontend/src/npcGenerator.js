@@ -335,6 +335,8 @@ export function generateBuilding(options = {}) {
 
 // ── Settlement Generator ────────────────────────────────────────
 
+let nextSettlementId = 1;
+
 export function generateSettlement(nameOrSettings, size = 'small') {
     // Accept either a string name or a full settings object
     let settings;

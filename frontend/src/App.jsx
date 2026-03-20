@@ -477,260 +477,264 @@ export default function App() {
 
   return (
     <ErrorBoundary>
-      {!settlement ? (
-        <LandingPage
-          prompt={prompt}
-          setPrompt={setPrompt}
-          loading={loading}
-          handleGenerate={handleGenerate}
-          onLoadCloud={() => setShowSaves(true)}
-          onLoginClick={() => setShowAuthModal(true)}
-          onGuestStart={() => { setSettlement({ name: 'Untitled Settlement', loading: true }); setShowCreator(true); }}
-        />
-      ) : (
-        <div className="app dashboard-mode">
-          <header className="app-header-main">
-            <div className="header-top">
-              <button className="btn btn-sm btn-secondary header-back-btn" onClick={handleBack} style={{ marginRight: '10px', zIndex: 100 }}>⬅ Back</button>
-              <div className="user-status">
-                {session ? (
-                  <span>Welcome, {session.user.email} <button className="btn btn-sm btn-secondary" onClick={handleSignOut} style={{ marginLeft: '10px' }}>Sign Out</button></span>
+      <div className="app-container">
+        {!settlement ? (
+          <div className="landing-wrapper">
+            <LandingPage
+              prompt={prompt}
+              setPrompt={setPrompt}
+              loading={loading}
+              handleGenerate={handleGenerate}
+              onLoadCloud={() => setShowSaves(true)}
+              onLoginClick={() => setShowAuthModal(true)}
+              onGuestStart={() => { setSettlement({ name: 'Untitled Settlement', loading: true }); setShowCreator(true); }}
+            />
+          </div>
+        ) : (
+          <div className="app dashboard-mode">
+            <header className="app-header-main">
+              <div className="header-top">
+                <button className="btn btn-sm btn-secondary header-back-btn" onClick={handleBack} style={{ marginRight: '10px', zIndex: 100 }}>⬅ Back</button>
+                <div className="user-status">
+                  {session ? (
+                    <span>Welcome, {session.user.email} <button className="btn btn-sm btn-secondary" onClick={handleSignOut} style={{ marginLeft: '10px' }}>Sign Out</button></span>
+                  ) : (
+                    <span>Welcome, Guest Wanderer <button className="btn btn-sm btn-primary" onClick={() => setShowAuthModal(true)} style={{ marginLeft: '10px' }}>LOG IN TO SAVE</button></span>
+                  )}
+                </div>
+                <div className="app-logo">⚔️ TTRPG MAP FORGE</div>
+                <div className="header-spacer"></div>
+              </div>
+              <p className="app-tagline">Your Infinite Regional Map Generator</p>
+            </header>
+
+            {loading && (
+              <section className="card spinner-wrapper">
+                <div className="spinner" />
+                <p>Summoning your settlement from the aether…</p>
+              </section>
+            )}
+
+            {error && <div className="error-message">⚠️ {error}</div>}
+
+            {hasDashboard && (
+              <>
+                <Toolbar
+                  settlement={settlement}
+                  onViewPeople={handleViewPeople}
+                  onViewBuildings={handleViewBuildings}
+                  onViewFactions={handleViewFactions}
+                  onViewDistricts={handleViewDistricts}
+                  onViewShops={handleViewShops}
+                  onViewSettings={handleViewSettings}
+                  onExport={() => setShowExport(true)}
+                  onBack={handleBack}
+                  activeView={activeView}
+                />
+
+                <div className={`mobile-overlay ${activeView ? 'active' : ''}`} onClick={() => setActiveView(null)} />
+
+                <div className="dashboard-content">
+                  <div className="dashboard-main">
+                    <div className="map-controls-bar">
+                      <div className="toggle-group">
+                        <label className="switch">
+                          <input type="checkbox" checked={showGrid} onChange={(e) => setShowGrid(e.target.checked)} />
+                          <span className="slider round"></span>
+                        </label>
+                        <span>Grid</span>
+                      </div>
+
+                      <div className="toggle-group" style={{ marginLeft: '1rem', paddingLeft: '1rem', borderLeft: '1px solid #444' }}>
+                        <label className="switch">
+                          <input type="checkbox" checked={settlement.fogEnabled || false} onChange={(e) => setSettlement(p => ({ ...p, fogEnabled: e.target.checked }))} />
+                          <span className="slider round"></span>
+                        </label>
+                        <span>Fog of War</span>
+                      </div>
+
+                      {settlement.fogEnabled && (
+                        <div className="toggle-group">
+                          <button
+                            className={`btn btn-sm ${isDrawingFog ? 'btn-primary' : 'btn-secondary'}`}
+                            onClick={() => { setIsDrawingFog(!isDrawingFog); setDrawingDistrictId(null); }}
+                          >
+                            {isDrawingFog ? '✅ Stop Erasing' : '✏️ Erase Fog'}
+                          </button>
+                          <button className="btn btn-sm" style={{ background: 'transparent', color: '#ef4444', border: '1px solid #ef4444' }} onClick={handleClearFog}>
+                            🗑️ Reset Fog
+                          </button>
+                        </div>
+                      )}
+
+                      <div className="download-bar">
+                        <button className="btn btn-sm btn-secondary" onClick={saveSettlementToCloud} disabled={isSaving} style={{ marginRight: '8px' }}>
+                          {isSaving ? '⏳ Saving...' : '☁️ Save Cloud'}
+                        </button>
+                        <a className="btn btn-sm btn-secondary" href={imageUrl} download="fantasy-map.png" target="_blank" rel="noopener noreferrer">
+                          ⬇ Download Image
+                        </a>
+                      </div>
+                    </div>
+
+                    <InteractiveMap
+                      imageUrl={imageUrl}
+                      showGrid={showGrid}
+                      gridSize={appSettings.gridSize}
+                      gridColor={`rgba(255, 255, 255, ${appSettings.gridOpacity})`}
+                      fogEnabled={settlement.fogEnabled || false}
+                      fogPaths={settlement.fogPaths || []}
+                      fogOpacity={appSettings.fogOpacity}
+                      isDrawingFog={isDrawingFog}
+                      onAddFogPath={handleUpdateFogPaths}
+                      buildings={settlement.buildings}
+                      time={settlement.time}
+                      districts={settlement.districts}
+                      drawingDistrictId={drawingDistrictId}
+                      onUpdateDistrictPolygon={handleUpdateDistrictPolygon}
+                      onSelectBuilding={handleSelectBuilding}
+                      onUpdateBuildingPosition={(id, pos) => handleUpdateBuilding(id, { mapPosition: pos })}
+                    />
+
+                    <TimeSystem
+                      time={settlement.time}
+                      climate={settlement.settings.climate}
+                      onAdvanceHour={advanceHour}
+                      onTimeSkip={timeSkip}
+                      onSetTime={setTime}
+                      eventLog={eventLog}
+                    />
+                  </div>
+
+                  {(selectedNPC || selectedBuilding) && (
+                    <Sidebar
+                      settlement={settlement}
+                      selectedBuilding={selectedBuilding}
+                      selectedNPC={selectedNPC}
+                      onSelectNPC={handleSelectNPC}
+                      onSelectBuilding={handleSelectBuilding}
+                      onClose={handleCloseSidebar}
+                      onUpdateNotes={handleUpdateNotes}
+                      onUpdateNPC={handleUpdateNPC}
+                      onUpdateBuilding={handleUpdateBuilding}
+                      onAddNPC={handleAddNPC}
+                    />
+                  )}
+                </div>
+              </>
+            )}
+            
+            <footer className="app-footer">
+              Powered by Stable Diffusion via NVIDIA &middot; Built with React + FastAPI &middot; v1.0.4-FIX-MOBILE
+            </footer>
+          </div>
+        )}
+
+        {/* ── Modals & Overlays ── */}
+        {showCreator && (
+          <SettlementCreator
+            onClose={() => setShowCreator(false)}
+            onCreate={handleCreateSettlement}
+            isPremium={isPremium}
+          />
+        )}
+        
+        {showAuthModal && (
+          <Auth
+            onLogin={() => setShowAuthModal(false)}
+            onClose={() => setShowAuthModal(false)}
+          />
+        )}
+        
+        {showExport && settlement && (
+          <ExportPanel
+            settlement={settlement}
+            imageUrl={imageUrl}
+            onClose={() => setShowExport(false)}
+            isPremium={isPremium}
+            isGuest={isGuest}
+          />
+        )}
+        
+        {showPeopleList && settlement && (
+          <PeopleList
+            npcs={settlement.npcs}
+            buildings={settlement.buildings}
+            onSelectNPC={handleSelectNPC}
+            onClose={() => { setShowPeopleList(false); setActiveView(null); }}
+          />
+        )}
+        
+        {showBuildingList && settlement && (
+          <BuildingList
+            buildings={settlement.buildings}
+            npcs={settlement.npcs}
+            onSelectBuilding={handleSelectBuilding}
+            onClose={() => { setShowBuildingList(false); setActiveView(null); }}
+          />
+        )}
+        
+        {showFactionList && settlement && (
+          <FactionList
+            factions={settlement.factions}
+            npcs={settlement.npcs}
+            onClose={() => { setShowFactionList(false); setActiveView(null); }}
+          />
+        )}
+        
+        {showDistrictList && settlement && (
+          <DistrictList
+            districts={settlement.districts}
+            buildings={settlement.buildings}
+            drawingDistrictId={drawingDistrictId}
+            onSetDrawing={setDrawingDistrictId}
+            onUpdatePolygon={handleUpdateDistrictPolygon}
+            onSelectBuilding={handleSelectBuilding}
+            onClose={() => { setShowDistrictList(false); setActiveView(null); setDrawingDistrictId(null); }}
+          />
+        )}
+        
+        {showShopPanel && settlement && (
+          <ShopPanel
+            settlement={settlement}
+            onClose={() => setShowShopPanel(false)}
+          />
+        )}
+        
+        {showSettings && (
+          <SettingsPanel
+            settings={appSettings}
+            onUpdate={handleUpdateAppSettings}
+            onClose={() => setShowSettings(false)}
+          />
+        )}
+
+        {showSaves && (
+          <div className="modal-overlay">
+            <div className="modal-content" style={{ maxWidth: '500px' }}>
+              <div className="modal-header">
+                <h2>Cloud Saves</h2>
+                <button className="close-btn" onClick={() => setShowSaves(false)}>✕</button>
+              </div>
+              <div className="modal-body" style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                {savedSettlements.length === 0 ? (
+                  <p style={{ textAlign: 'center', color: '#888', fontStyle: 'italic' }}>No saved settlements found.</p>
                 ) : (
-                  <span>Welcome, Guest Wanderer <button className="btn btn-sm btn-primary" onClick={() => setShowAuthModal(true)} style={{ marginLeft: '10px' }}>LOG IN TO SAVE</button></span>
+                  savedSettlements.map(save => (
+                    <div key={save.id} className="save-item" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px', background: 'rgba(0,0,0,0.2)', border: '1px solid #444', borderRadius: '8px' }}>
+                      <div>
+                        <strong style={{ display: 'block', fontSize: '1.1rem' }}>{save.name}</strong>
+                        <span style={{ fontSize: '0.8rem', color: '#aaa' }}>{new Date(save.created_at).toLocaleString()}</span>
+                      </div>
+                      <button className="btn btn-sm btn-primary" onClick={() => loadSettlementFromCloud(save.id)}>Load</button>
+                    </div>
+                  ))
                 )}
               </div>
-              <div className="app-logo">⚔️ TTRPG MAP FORGE</div>
-              <div className="header-spacer"></div>
-            </div>
-            <p className="app-tagline">Your Infinite Regional Map Generator</p>
-          </header>
-
-          {loading && (
-            <section className="card spinner-wrapper">
-              <div className="spinner" />
-              <p>Summoning your settlement from the aether…</p>
-            </section>
-          )}
-
-          {error && <div className="error-message">⚠️ {error}</div>}
-
-          {hasDashboard && (
-            <>
-              <Toolbar
-                settlement={settlement}
-                onViewPeople={handleViewPeople}
-                onViewBuildings={handleViewBuildings}
-                onViewFactions={handleViewFactions}
-                onViewDistricts={handleViewDistricts}
-                onViewShops={handleViewShops}
-                onViewSettings={handleViewSettings}
-                onExport={() => setShowExport(true)}
-                onBack={handleBack}
-                activeView={activeView}
-              />
-
-              <div className={`mobile-overlay ${activeView ? 'active' : ''}`} onClick={() => setActiveView(null)} />
-
-              <div className="dashboard-content">
-                <div className="dashboard-main">
-                  <div className="map-controls-bar">
-                    <div className="toggle-group">
-                      <label className="switch">
-                        <input type="checkbox" checked={showGrid} onChange={(e) => setShowGrid(e.target.checked)} />
-                        <span className="slider round"></span>
-                      </label>
-                      <span>Grid</span>
-                    </div>
-
-                    <div className="toggle-group" style={{ marginLeft: '1rem', paddingLeft: '1rem', borderLeft: '1px solid #444' }}>
-                      <label className="switch">
-                        <input type="checkbox" checked={settlement.fogEnabled || false} onChange={(e) => setSettlement(p => ({ ...p, fogEnabled: e.target.checked }))} />
-                        <span className="slider round"></span>
-                      </label>
-                      <span>Fog of War</span>
-                    </div>
-
-                    {settlement.fogEnabled && (
-                      <div className="toggle-group">
-                        <button
-                          className={`btn btn-sm ${isDrawingFog ? 'btn-primary' : 'btn-secondary'}`}
-                          onClick={() => { setIsDrawingFog(!isDrawingFog); setDrawingDistrictId(null); }}
-                        >
-                          {isDrawingFog ? '✅ Stop Erasing' : '✏️ Erase Fog'}
-                        </button>
-                        <button className="btn btn-sm" style={{ background: 'transparent', color: '#ef4444', border: '1px solid #ef4444' }} onClick={handleClearFog}>
-                          🗑️ Reset Fog
-                        </button>
-                      </div>
-                    )}
-
-                    <div className="download-bar">
-                      <button className="btn btn-sm btn-secondary" onClick={saveSettlementToCloud} disabled={isSaving} style={{ marginRight: '8px' }}>
-                        {isSaving ? '⏳ Saving...' : '☁️ Save Cloud'}
-                      </button>
-                      <a className="btn btn-sm btn-secondary" href={imageUrl} download="fantasy-map.png" target="_blank" rel="noopener noreferrer">
-                        ⬇ Download Image
-                      </a>
-                    </div>
-                  </div>
-
-                  <InteractiveMap
-                    imageUrl={imageUrl}
-                    showGrid={showGrid}
-                    gridSize={appSettings.gridSize}
-                    gridColor={`rgba(255, 255, 255, ${appSettings.gridOpacity})`}
-                    fogEnabled={settlement.fogEnabled || false}
-                    fogPaths={settlement.fogPaths || []}
-                    fogOpacity={appSettings.fogOpacity}
-                    isDrawingFog={isDrawingFog}
-                    onAddFogPath={handleUpdateFogPaths}
-                    buildings={settlement.buildings}
-                    time={settlement.time}
-                    districts={settlement.districts}
-                    drawingDistrictId={drawingDistrictId}
-                    onUpdateDistrictPolygon={handleUpdateDistrictPolygon}
-                    onSelectBuilding={handleSelectBuilding}
-                    onUpdateBuildingPosition={(id, pos) => handleUpdateBuilding(id, { mapPosition: pos })}
-                  />
-
-                  <TimeSystem
-                    time={settlement.time}
-                    climate={settlement.settings.climate}
-                    onAdvanceHour={advanceHour}
-                    onTimeSkip={timeSkip}
-                    onSetTime={setTime}
-                    eventLog={eventLog}
-                  />
-                </div>
-
-                {(selectedNPC || selectedBuilding) && (
-                  <Sidebar
-                    settlement={settlement}
-                    selectedBuilding={selectedBuilding}
-                    selectedNPC={selectedNPC}
-                    onSelectNPC={handleSelectNPC}
-                    onSelectBuilding={handleSelectBuilding}
-                    onClose={handleCloseSidebar}
-                    onUpdateNotes={handleUpdateNotes}
-                    onUpdateNPC={handleUpdateNPC}
-                    onUpdateBuilding={handleUpdateBuilding}
-                    onAddNPC={handleAddNPC}
-                  />
-                )}
-            </div>
-          </>
-        )}
-      </div>
-    )}
-
-      {/* ── Modals & Overlays ── */}
-      {showCreator && (
-        <SettlementCreator
-          onClose={() => setShowCreator(false)}
-          onCreate={handleCreateSettlement}
-          isPremium={isPremium}
-        />
-      )}
-      
-      {showAuthModal && (
-        <Auth
-          onLogin={() => setShowAuthModal(false)}
-          onClose={() => setShowAuthModal(false)}
-        />
-      )}
-      
-      {showExport && settlement && (
-        <ExportPanel
-          settlement={settlement}
-          imageUrl={imageUrl}
-          onClose={() => setShowExport(false)}
-          isPremium={isPremium}
-          isGuest={isGuest}
-        />
-      )}
-      
-      {showPeopleList && settlement && (
-        <PeopleList
-          npcs={settlement.npcs}
-          buildings={settlement.buildings}
-          onSelectNPC={handleSelectNPC}
-          onClose={() => { setShowPeopleList(false); setActiveView(null); }}
-        />
-      )}
-      
-      {showBuildingList && settlement && (
-        <BuildingList
-          buildings={settlement.buildings}
-          npcs={settlement.npcs}
-          onSelectBuilding={handleSelectBuilding}
-          onClose={() => { setShowBuildingList(false); setActiveView(null); }}
-        />
-      )}
-      
-      {showFactionList && settlement && (
-        <FactionList
-          factions={settlement.factions}
-          npcs={settlement.npcs}
-          onClose={() => { setShowFactionList(false); setActiveView(null); }}
-        />
-      )}
-      
-      {showDistrictList && settlement && (
-        <DistrictList
-          districts={settlement.districts}
-          buildings={settlement.buildings}
-          drawingDistrictId={drawingDistrictId}
-          onSetDrawing={setDrawingDistrictId}
-          onUpdatePolygon={handleUpdateDistrictPolygon}
-          onSelectBuilding={handleSelectBuilding}
-          onClose={() => { setShowDistrictList(false); setActiveView(null); setDrawingDistrictId(null); }}
-        />
-      )}
-      
-      {showShopPanel && settlement && (
-        <ShopPanel
-          settlement={settlement}
-          onClose={() => setShowShopPanel(false)}
-        />
-      )}
-      
-      {showSettings && (
-        <SettingsPanel
-          settings={appSettings}
-          onUpdate={handleUpdateAppSettings}
-          onClose={() => setShowSettings(false)}
-        />
-      )}
-
-      {showSaves && (
-        <div className="modal-overlay">
-          <div className="modal-content" style={{ maxWidth: '500px' }}>
-            <div className="modal-header">
-              <h2>Cloud Saves</h2>
-              <button className="close-btn" onClick={() => setShowSaves(false)}>✕</button>
-            </div>
-            <div className="modal-body" style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              {savedSettlements.length === 0 ? (
-                <p style={{ textAlign: 'center', color: '#888', fontStyle: 'italic' }}>No saved settlements found.</p>
-              ) : (
-                savedSettlements.map(save => (
-                  <div key={save.id} className="save-item" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px', background: 'rgba(0,0,0,0.2)', border: '1px solid #444', borderRadius: '8px' }}>
-                    <div>
-                      <strong style={{ display: 'block', fontSize: '1.1rem' }}>{save.name}</strong>
-                      <span style={{ fontSize: '0.8rem', color: '#aaa' }}>{new Date(save.created_at).toLocaleString()}</span>
-                    </div>
-                    <button className="btn btn-sm btn-primary" onClick={() => loadSettlementFromCloud(save.id)}>Load</button>
-                  </div>
-                ))
-              )}
             </div>
           </div>
-        </div>
-      )}
-
-      <footer className="app-footer">
-        Powered by Stable Diffusion via NVIDIA &middot; Built with React + FastAPI &middot; v1.0.4-FIX-MODAL
-      </footer>
+        )}
+      </div>
     </ErrorBoundary>
   );
 }

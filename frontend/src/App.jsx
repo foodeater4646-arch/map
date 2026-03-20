@@ -225,6 +225,10 @@ export default function App() {
   };
 
   const loadSettlementFromCloud = async (id) => {
+    if (!id) {
+      setShowCreator(true);
+      return;
+    }
     try {
       const { data, error } = await supabase
         .from('settlements')

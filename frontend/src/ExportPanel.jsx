@@ -264,23 +264,26 @@ export default function ExportPanel({ settlement, imageUrl, onClose, isPremium, 
                         <span className="export-desc">Download as PNG</span>
                     </button>
 
-                    <button className="export-card" onClick={exportJSON}>
+                    <div className={`export-card ${!isPremium ? 'locked' : ''}`} onClick={isPremium ? exportJSON : undefined}>
                         <span className="export-icon">📋</span>
                         <span className="export-label">Full Settlement</span>
                         <span className="export-desc">JSON (all data)</span>
-                    </button>
+                        {!isPremium && <PremiumBadge feature="Full Export" compact />}
+                    </div>
 
-                    <button className="export-card" onClick={exportPeopleCSV}>
+                    <div className={`export-card ${!isPremium ? 'locked' : ''}`} onClick={isPremium ? exportPeopleCSV : undefined}>
                         <span className="export-icon">👥</span>
                         <span className="export-label">People</span>
                         <span className="export-desc">CSV spreadsheet</span>
-                    </button>
+                        {!isPremium && <PremiumBadge feature="CSV Export" compact />}
+                    </div>
 
-                    <button className="export-card" onClick={exportBuildingsCSV}>
+                    <div className={`export-card ${!isPremium ? 'locked' : ''}`} onClick={isPremium ? exportBuildingsCSV : undefined}>
                         <span className="export-icon">🏛️</span>
                         <span className="export-label">Buildings</span>
                         <span className="export-desc">CSV spreadsheet</span>
-                    </button>
+                        {!isPremium && <PremiumBadge feature="CSV Export" compact />}
+                    </div>
 
                     <div className={`export-card vtt ${!isPremium ? 'locked' : ''}`} onClick={isPremium ? exportFoundryVTT : undefined}>
                         <span className="export-icon">🎲</span>
@@ -296,11 +299,12 @@ export default function ExportPanel({ settlement, imageUrl, onClose, isPremium, 
                         {!isPremium && <PremiumBadge feature="VTT Export" compact />}
                     </div>
 
-                    <button className="export-card wiki" onClick={exportCampaignWiki}>
+                    <div className={`export-card wiki ${!isPremium ? 'locked' : ''}`} onClick={isPremium ? exportCampaignWiki : undefined}>
                         <span className="export-icon">📖</span>
                         <span className="export-label">Campaign Wiki</span>
                         <span className="export-desc">Full Markdown</span>
-                    </button>
+                        {!isPremium && <PremiumBadge feature="Wiki Export" compact />}
+                    </div>
                 </div>
             </div>
         </div>

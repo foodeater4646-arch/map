@@ -474,7 +474,7 @@ export default function App() {
           handleGenerate={handleGenerate}
           onLoadCloud={() => setShowSaves(true)}
           onLoginClick={() => setShowAuthModal(true)}
-          onGuestStart={() => setSettlement({ name: 'Untitled Settlement', loading: true })} // Trigger creator or temporary state
+          onGuestStart={() => { setSettlement({ name: 'Untitled Settlement', loading: true }); setShowCreator(true); }}
         />
       ) : (
         <div className="app dashboard-mode">

@@ -8,6 +8,7 @@
 
 import React, { useState, useCallback, useEffect } from "react";
 import "./App.css";
+import logo from "./assets/logo.png";
 import InteractiveMap from "./InteractiveMap";
 import Sidebar from "./Sidebar";
 import Toolbar from "./Toolbar";
@@ -510,7 +511,10 @@ export default function App() {
                     <span>Welcome, Guest Wanderer <button className="btn btn-sm btn-primary" onClick={() => setShowAuthModal(true)} style={{ marginLeft: '10px' }}>LOG IN TO SAVE</button></span>
                   )}
                 </div>
-                <div className="app-logo">⚔️ TTRPG MAP FORGE</div>
+                <div className="app-logo">
+                  <img src={logo} alt="Map Forge Logo" className="header-logo-img" />
+                  <span>TTRPG MAP FORGE</span>
+                </div>
                 <div className="header-spacer"></div>
               </div>
               <p className="app-tagline">Your Infinite Regional Map Generator</p>

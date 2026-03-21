@@ -1,5 +1,7 @@
 import React from 'react';
 import './LandingPage.css';
+import logo from './assets/logo.png';
+import heroBg from './assets/hero-bg.png';
 
 export default function LandingPage({
     prompt,
@@ -18,7 +20,10 @@ export default function LandingPage({
         <div className="landing-container">
             {/* ── Navbar ── */}
             <nav className="landing-nav">
-                <div className="nav-brand">⚔️ Map Forge</div>
+                <div className="nav-brand">
+                    <img src={logo} alt="Map Forge Logo" className="nav-logo" />
+                    <span>Map Forge</span>
+                </div>
                 <div className="nav-links">
                     <a href="#features">Features</a>
                     <a href="#pricing">Pricing</a>
@@ -34,27 +39,33 @@ export default function LandingPage({
             </nav>
 
             {/* ── Hero Section ── */}
-            <header className="hero-section">
+            <header className="hero-section" style={{ backgroundImage: `url(${heroBg})` }}>
+                <div className="hero-overlay"></div>
                 <div className="hero-content">
-                    <h1 className="hero-title">Every street, building, and resident</h1>
-                    <h1 className="highlight">ready in seconds.</h1>
+                    <div className="hero-badge">✨ THE ULTIMATE DM'S TOOLKIT</div>
+                    <h1 className="hero-title">
+                        Infinite Cities, <br />
+                        <span className="hero-title-main">Zero Prep</span>
+                    </h1>
+                    <h1 className="hero-title-highlight">Generated in Seconds.</h1>
                     <p className="hero-subtitle">
-                        Generate highly detailed, interactive fantasy settlement maps powered by Stable Diffusion.
-                        Simulate thousands of NPCs, control the weather, edit the town, and export your world for VTTs.
+                        Create immersive, living fantasy settlements with procedural depth. Populate your world with unique NPCs, historical lore, and high-fidelity maps—all in real-time.
                     </p>
                     <div className="hero-actions">
-                        <button className="btn btn-primary hero-btn" onClick={session ? () => onLoadSave(null) : onLoginClick}>
-                            {session ? "Create New Settlement" : "Create & Manage Settlements"} <br /> 
-                            <small>{session ? "Procedural Alpha v2" : "Save to Cloud"}</small>
+                        <button className="btn btn-primary hero-btn-main" onClick={session ? () => onLoadSave(null) : onLoginClick}>
+                            <span>Create New Settlement</span>
+                            <small>{session ? "Procedural Alpha v2" : "Cloud Storage Ready"}</small>
                         </button>
                         {!session && (
-                            <button className="btn btn-secondary hero-btn guest-btn" onClick={onGuestStart}>
-                                Create One-Time Settlement <br /> <small>No sign-up (Deletes on exit)</small>
+                            <button className="btn btn-secondary hero-btn-secondary" onClick={onGuestStart}>
+                                <span>Start as Guest</span>
+                                <small>One-time use</small>
                             </button>
                         )}
                         {session && (
-                            <button className="btn btn-secondary hero-btn" onClick={() => window.scrollTo({ top: document.getElementById('saved-worlds').offsetTop - 100, behavior: 'smooth' })}>
-                                View Your Saves <br /> <small>{savedSettlements.length} Cloud Worlds</small>
+                            <button className="btn btn-secondary hero-btn-secondary" onClick={() => window.scrollTo({ top: document.getElementById('saved-worlds').offsetTop - 100, behavior: 'smooth' })}>
+                                <span>View Your Saves</span>
+                                <small>{savedSettlements.length} Cloud Worlds</small>
                             </button>
                         )}
                     </div>

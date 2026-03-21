@@ -209,8 +209,31 @@ let nextNpcId = 1;
 
 export function generateNPC(options = {}) {
     const gender = options.gender || (Math.random() > 0.5 ? 'Male' : 'Female');
-    const firstName = pick(gender === 'Male' ? FIRST_NAMES_MALE : FIRST_NAMES_FEMALE);
-    const lastName = pick(LAST_NAMES);
+    
+    // Support Custom Name Lists
+    let firstName;
+    const customNames = options.customNameList;
+    if (customNames) {
+        if (gender === 'Male' && customNames.male && customNames.male.length > 0) {
+            firstName = pick(customNames.male);
+        } else if (gender === 'Female' && customNames.female && customNames.female.length > 0) {
+            firstName = pick(customNames.female);
+        } else if (customNames.names && customNames.names.length > 0) {
+            firstName = pick(customNames.names);
+        }
+    }
+    
+    if (!firstName) {
+        firstName = pick(gender === 'Male' ? FIRST_NAMES_MALE : FIRST_NAMES_FEMALE);
+    }
+
+    let lastName;
+    if (customNames && customNames.last && customNames.last.length > 0) {
+        lastName = pick(customNames.last);
+    } else {
+        lastName = pick(LAST_NAMES);
+    }
+
     const race = options.race || pickWeighted(RACES);
     const job = options.job || pick(JOBS);
     const age = Math.floor(Math.random() * 60) + 18;
@@ -433,7 +456,7 @@ export function generateSettlement(nameOrSettings, size = 'small') {
     const npcs = [];
     for (let i = 0; i < config.npcs; i++) {
         const race = pickWeighted(raceWeights);
-        const npc = generateNPC({ race });
+        const npc = generateNPC({ race, customNameList: settings.customNameList });
         // Assign NPC to a random building/room
         const building = pick(buildings);
         const room = pick(building.rooms);

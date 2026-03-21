@@ -102,6 +102,7 @@ export default function SettlementCreator({ onClose, onCreate, isPremium }) {
 
     // ── Advanced / Buildings ──────────────────────────────────
     const [seed, setSeed] = useState('');
+    const [customNameJSON, setCustomNameJSON] = useState('');
 
     // ── Race Handlers ─────────────────────────────────────────
     const updateRacePercentage = (idx, val) => {
@@ -130,6 +131,16 @@ export default function SettlementCreator({ onClose, onCreate, isPremium }) {
 
     // ── Build Settings Object ─────────────────────────────────
     const handleCreate = () => {
+        let customNameList = null;
+        if (isPremium && customNameJSON.trim()) {
+            try {
+                customNameList = JSON.parse(customNameJSON);
+            } catch (e) {
+                alert("Invalid JSON in Custom Name List. Please check your formatting.");
+                return;
+            }
+        }
+
         const settings = {
             name, size, lifestyle, guardLevel,
             roadStyle, wallType, buildingDensity,
@@ -139,6 +150,7 @@ export default function SettlementCreator({ onClose, onCreate, isPremium }) {
             waterType, waterDirection,
             districtComplexity, factionDensity, daysInWeek, economyLevel,
             seed: seed || undefined,
+            customNameList
         };
         onCreate(settings);
     };
@@ -278,6 +290,8 @@ export default function SettlementCreator({ onClose, onCreate, isPremium }) {
                                 <label>Custom Name List (JSON)</label>
                                 <textarea
                                     disabled={!isPremium}
+                                    value={customNameJSON}
+                                    onChange={e => setCustomNameJSON(e.target.value)}
                                     placeholder='e.g. {"male": ["Thorin"], "female": ["Galadriel"], "last": ["Oakenshield"]}'
                                     style={{ width: '100%', height: '80px', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '6px', color: 'var(--text-primary)', padding: '10px', fontSize: '0.85rem' }}
                                 />

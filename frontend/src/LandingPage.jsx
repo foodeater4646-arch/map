@@ -194,8 +194,8 @@ export default function LandingPage({
                         </div>
                         <ul className="pricing-features">
                             <li>👑 <strong>Unlimited</strong> cloud settlements</li>
-                            <li>👑 Real-time map generation preview</li>
-                            <li>👑 Metropolis Scale (Up to 500 residents)</li>
+                            <li>👑 Custom Name Lists & Presets</li>
+                            <li>👑 Grand Town Scale (Up to 500 residents)</li>
                             <li>👑 Direct VTT Integration (Foundry/Roll20)</li>
                         </ul>
                         <button className="btn btn-premium" onClick={() => window.open('https://www.patreon.com/c/mapforge936/membership', '_blank')}>Unlock Premium</button>

@@ -200,10 +200,10 @@ export default function SettlementCreator({ onClose, onCreate, isPremium }) {
                                         <option value="medium">Medium (~30 people)</option>
                                         <option value="large">Large (~50 people)</option>
                                         <option value="metropolis" disabled={!isPremium}>
-                                            Metropolis (~200 people) {!isPremium ? '👑 Premium' : ''}
+                                            Town (~200 people) {!isPremium ? '👑 Premium' : ''}
                                         </option>
                                         <option value="mega-city" disabled={!isPremium}>
-                                            Mega-City (~500 people) {!isPremium ? '👑 Premium' : ''}
+                                            Grand Town (~500 people) {!isPremium ? '👑 Premium' : ''}
                                         </option>
                                     </select>
                                 </div>
@@ -462,14 +462,6 @@ export default function SettlementCreator({ onClose, onCreate, isPremium }) {
                                 <p className="field-hint">Use the same seed to recreate an identical settlement.</p>
                             </div>
 
-                            <div className="field" style={{ position: 'relative', marginTop: '1rem' }}>
-                                <label className="checkbox-label">
-                                    <input type="checkbox" disabled={!isPremium} />
-                                    Real-time Map Preview
-                                </label>
-                                <p className="field-hint">See building placement updates live as you change settings.</p>
-                                {!isPremium && <PremiumBadge feature="Real-time Preview" compact />}
-                            </div>
                         </div>
                     )}
                 </div>
